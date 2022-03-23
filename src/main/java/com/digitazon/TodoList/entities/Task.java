@@ -11,6 +11,14 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private String name;
+    private boolean done;
+    private LocalDateTime created;
+
+    @ManyToOne(fetch = FetchType.EAGER) //fetch x prendere
+    @JoinColumn(name = "category_id")
+    private Category category;
+
 
     public int getId() {
         return id;
@@ -22,6 +30,14 @@ public class Task {
 
     public LocalDateTime getCreated() {
         return created;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public boolean isDone() {
@@ -43,8 +59,4 @@ public class Task {
     public void setDone(boolean done) {
         this.done = done;
     }
-
-    private String name;
-    private LocalDateTime created;
-    private boolean done;
 }

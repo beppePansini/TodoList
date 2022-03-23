@@ -1,6 +1,9 @@
 package com.digitazon.TodoList.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -11,4 +14,40 @@ public class Category {
 
     private String name;
     private String color;
+
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private List<Task> tasks;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
 }
