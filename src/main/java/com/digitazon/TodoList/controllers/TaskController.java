@@ -1,6 +1,8 @@
 package com.digitazon.TodoList.controllers;
 
+import com.digitazon.TodoList.entities.Category;
 import com.digitazon.TodoList.entities.Task;
+import com.digitazon.TodoList.repositories.CategoryRepository;
 import com.digitazon.TodoList.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -13,6 +15,8 @@ public class TaskController {
 
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping("/")
     public Iterable<Task> home() {
@@ -27,8 +31,10 @@ public class TaskController {
 
     @PostMapping("/add")
     public Task create(@RequestBody Task newTask) {
-        System.out.println(newTask.getCategory().getColor());
-        return taskRepository.save(newTask);
+        Task savedTask = taskRepository.save(newTask);
+        Category category = categoryRepository.findById(savedTask.getCategory().getId()).orElseThrow();
+        savedTask.setCategory(category);
+        return savedTask;
     }
 
     @DeleteMapping("/{id}")
@@ -58,6 +64,12 @@ public class TaskController {
         Task task = taskRepository.findById(id).orElseThrow();
         task.setDone(updatedTask.isDone());
         return taskRepository.save(task);
+    }
+
+    @DeleteMapping
+    public String deleteAll() {
+        taskRepository.deleteAll();
+        return "ok";
     }
 
 /*    @PostMapping("/{id}/edit")
